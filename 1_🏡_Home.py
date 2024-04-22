@@ -1,5 +1,10 @@
+import pandas as pd
 import streamlit as st
 from streamlit_pills import pills
+
+from st_utils import (
+    add_sidebar,
+)
 
 st.set_page_config(
     page_title="Build a RAG bot, powered by Conflux",
@@ -19,6 +24,8 @@ st.info(
     icon="ℹ️",
 )
 
+add_sidebar()
+
 # add pills (pills are used to create clickable options on the page)
 selected = pills(
     label="Outline your task!",
@@ -30,6 +37,15 @@ selected = pills(
     clearable=True,
     index=None
 )
+
+# # Choose a file loader if user wants to choose his own PDFs.
+# uploaded_file = st.file_uploader(label="Choose a file to analyze",
+#                                  type="pdf",
+#                                  accept_multiple_files=False,)
+#
+# if uploaded_file is not None:
+#     data_in_bytes = uploaded_file.getvalue()
+
 
 # Initialize the chat messages history
 if "messages" not in st.session_state.keys():
@@ -48,7 +64,7 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.write(message["content"])
 
-prompt = st.chat_input("Your question",)# Prompt for user input and save to chat history
+prompt = st.chat_input("Your question", )  # Prompt for user input and save to chat history
 if prompt is not None:
     if "has_rerun" in st.session_state.keys() and st.session_state.has_rerun:
         st.session_state.has_rerun = False
@@ -65,7 +81,3 @@ if prompt is not None:
                     add_to_message_history("assistant", response)
         else:
             pass
-
-
-
-
